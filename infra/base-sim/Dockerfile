@@ -29,7 +29,9 @@ COPY scripts/ $SCRIPTS/
 COPY opentitan-requirements.txt sim-requirements.txt $SRC/
 
 # Install python dependencies
-RUN apt-get update && apt-get install -y git xxd
+RUN apt-get update && apt-get install -y wget git xxd python3.8-dev
+RUN rm /usr/bin/python3
+RUN ln -s $(which python3.8) /usr/bin/python3
 
 # Install OpenTitan and Python Dependencies
 RUN python3 -m pip install -r $SRC/opentitan-requirements.txt
@@ -38,11 +40,14 @@ RUN python3 -m pip install -r $SRC/sim-requirements.txt
 # Install HW Fuzzing Utils Dependencies
 RUN python3 -m pip install -r $HW/hwfutils/requirements.txt
 ENV PYTHONPATH="$PYTHONPATH:$HW/hwfutils"
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.22.1/cmake-3.22.1-linux-x86_64.sh -O /tmp/cmake.sh \
+    && chmod +x /tmp/cmake.sh \
+    && /tmp/cmake.sh --skip-license --prefix=/usr/local \
+    && rm /tmp/cmake.sh
 
 # Install kcov for post-fuzzing coverage tracing
 RUN apt-get update && apt-get install -y \
       binutils-dev \
-      cmake \
       libcurl4-openssl-dev \
       zlib1g-dev \
       libdw-dev \
