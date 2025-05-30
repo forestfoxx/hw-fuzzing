@@ -137,7 +137,7 @@ Python 3.8, and requires the following dependencies.
 
 ##### a. Fuzzing Locally
 
-1. `make fuzz-<core>` where `<core>` is [aes, hmac, kmac, rv_timer] to launch
+1. `make fuzz-ot-<core>` where `<core>` is [aes, hmac, kmac, rv_timer] to launch
    interactive container.
 2. `run` to begin RTL translation, intrustmentation, and fuzzing (if in manual
     mode, which is default, otherwise this step can be skipped).
